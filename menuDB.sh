@@ -2,13 +2,13 @@
 select choice in "Create Database" "List Databases" "Drop Database" "Connect To Databases" "Exit"
 do
 case $REPLY in 
-1) echo "Create"
+1) ../DBFunctions/DBCreate.sh
 ;;
-2) echo "List"
+2) ../DBFunctions/DBList.sh
 ;;
-3) ../DBDrop.sh
+3) ../DBFunctions/DBDrop.sh
 ;;
-4) ../DBConnection.sh
+4) ../DBFunctions/DBConnection.sh
 ;;
 5)cd .. ; exec bash ;exit
 ;;
