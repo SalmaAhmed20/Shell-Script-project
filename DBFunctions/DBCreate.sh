@@ -1,13 +1,13 @@
 #!/bin/bash
 function CreateDB {
-    read -p "Enter Database Name: " name
-    if [[ $name =~ ^[a-zA-Z]{1}[_0-9a-zA-Z$]{,63}$ ]]
+    read -p "Enter Database Name: " DBname
+    if [[ $DBname =~ ^[a-zA-Z]{1}[_0-9a-zA-Z$]{,63}$ ]]
     then
-        if [ -d "$name" ]
+        if [ -d "$DBname" ]
         then
             echo "database already exist"
         else
-            mkdir $name
+            mkdir $DBname
         fi
     else
         echo "Not valid name"

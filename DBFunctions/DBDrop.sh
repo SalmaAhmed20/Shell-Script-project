@@ -6,8 +6,8 @@ function DropDB {
         if [[ $DBname == *[_$] ]]
         then echo "Not Valid DB name"
         else
-            DirExist=$(find "${DBname}" 2> /dev/null | wc -l )
-            if [[ $DirExist -ge 1 && ( -d "${DBname}" ) ]]
+            DirExist=$(find "${DBname}" -type d -maxdepth 0 2> /dev/null | wc -l )
+            if [[ $DirExist -eq 1  ]]
             then
                 rm -r "$DBname"
             else
