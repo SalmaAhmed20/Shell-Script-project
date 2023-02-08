@@ -9,4 +9,3 @@ else
 mkdir "DBMS" ; cd "DBMS"
 fi
 ../menuDB.sh
-#test

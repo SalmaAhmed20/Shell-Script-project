@@ -19,7 +19,6 @@ function ConnectToDB {
     else
         echo "Not Valid DB name"
     fi
-    cd ..
     ./../menuDB.sh
 }
 ConnectToDB
