@@ -64,8 +64,9 @@ function deleteSpecific {
                 break
                 else
                     NR=$(awk 'BEGIN{FS=":"}{if ($'$opt'=="'$data'") print NR}' $tName )
+                    echo $NR
                     sed -i ''$NR'd' $tName
-                fi
+                    fi
             fi
         fi
     done
