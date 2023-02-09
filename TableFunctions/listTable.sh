@@ -9,6 +9,6 @@ do
    iterator=$iterator+1
 done
 else
-echo "------No Tables in \"$(basename $(pwd))\" DataBase ------"
+echo "------No Tables in \"$(basename $(pwd))\" DataBase ------"   # basename cut the last dir from it's suffix
 fi
 ./../../menuTA.sh

@@ -8,7 +8,7 @@ function CreateTable {
     if [[ $Tname =~ ^[a-zA-Z]{1}[_0-9a-zA-Z]{,31}$ ]]
     then
         # check that table don't end with _
-        if [[ $DBname == *[_] ]]
+        if [[ $Tname == *[_] ]]
         then echo "Not Valid Table name"
         else
             # check for existance
@@ -53,7 +53,7 @@ function CreateTable {
                             *) flag=0; echo "not supported"
                         esac
                     done
-                    echo "${fName} ${dt}" >> "${Tname}_meta"
+                    echo "${fName}${dt}" >> "${Tname}_meta"
                     iterator=$iterator+1
                 done
             fi
