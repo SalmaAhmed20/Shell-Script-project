@@ -34,33 +34,40 @@ function checkPK {
 }
 function readRecord {
     line=""
+    iterator=1;
     # read meta data 
     while read f1 f2 
     do 
-        
+
         read -u 1 -p "Enter $f1 record " record
         if [[ record =~ [:] ]]
         then
-        echo "Forbbiden character \":\" "
+        echo "----Forbbiden character \":\" ----"
         else
             if [[ $iterator = 1 ]]
             then 
-            echo "true"
-            else
-            # grep
-            echo /
-                checkDataType $f2 $record 
-                    if [[ $? = 1 ]]
+             checkPK $f2 $record 
+                if [[ $? = 1 ]]
                     then 
-                    line+="${record}:"
+                    line+="${record}"
                     else
-                    echo "invalid data type"
-                    break
-                    fi
+                     break
+                fi
+            else
+
+
+                checkDataType $f2 $record 
+                if [[ $? = 1 ]]
+                then 
+                line+=":${record}"
+                else
+                echo "----invalid data type----"
+                break
+                fi
             fi
         fi
         iterator+=1
-        
+
     done  < "${Tname}_meta"
     echo $line >> $Tname
 }
@@ -72,7 +79,7 @@ function insert {
         readRecord
                 
         else
-        echo "No Such Table with Name: \"$Tname\" "
+        echo "----No Such Table with Name: \"$Tname\" ----"
     fi
     
     ./../../menuTA.sh
