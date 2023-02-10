@@ -16,6 +16,8 @@ function deleteSpecific {
                 datatypes=(${datatypes[@]} "${field}")
             fi
         done
+        echo $(($idx+1))")""Go Back"
+        idx=$idx+1
         curr=$(basename $(pwd))
         read -p "DB/$curr/${1}>>" opt
         temp=$(($idx+1))
@@ -24,6 +26,10 @@ function deleteSpecific {
             echo "Not valid"
             continue
         else
+        if [ $opt -eq $idx ]; then
+        echo "------cancel current deleting process------"
+        break    
+        fi
             temp=$(($opt-1))
             if [[ ${datatypes[$temp]} = "-i" ]]
             then
