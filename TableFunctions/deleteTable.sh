@@ -1,7 +1,4 @@
 #!/bin/bash
-function deleteOneRow {
-    fields=$(cut -d "-" -f1 "${1}_meta")
-}
 function deleteSpecific {
     meta="${1}_meta"
     datatypes=()
