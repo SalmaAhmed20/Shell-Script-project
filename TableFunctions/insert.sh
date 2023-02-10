@@ -76,13 +76,25 @@ function insert {
     read -p "Enter table name " Tname
     if [[ -f $Tname && -f "${Tname}_meta" ]]
     then
-        readRecord
+        select choice in "Insert Row" Menu Exit
+        do
+        case $REPLY in
+        1 ) readRecord
+         ;; 
+        2 ) 
+        ./../../menuTA.sh 
+        break ;;
+        3 ) exit 
+        ;;
+        esac
+        done
+        
                 
         else
         echo "----No Such Table with Name: \"$Tname\" ----"
     fi
     
-    ./../../menuTA.sh
+   # ./../../menuTA.sh
 }
 
 insert
