@@ -7,7 +7,6 @@ function deleteOneRow {
 function deleteSpecific {
     meta="${1}_meta"
     datatypes=()
-    fields=()
     data=""
     tName=$1
     while [[ true ]]; do
@@ -26,10 +25,9 @@ function deleteSpecific {
                 # echo  ${datatypes[$idx]}
             fi
         done
-# echo  ${datatypes[0]}
 
         curr=$(basename $(pwd))
-        # typeset -i opt=0;
+        # typeset -i opt=0;5
         read -p "DB/$curr/${1}>>" opt
         temp=$(($idx+1))
         if [[ $opt -le 0 || $opt -gt $temp ]]
@@ -43,32 +41,45 @@ function deleteSpecific {
             then
                 if [[ $data =~ ^[0-9]+$ ]]
                 then
-                    res=$(awk 'BEGIN{FS=":"}{if ($'$opt'=="'$data'") print $'$data'}' $tName )
+                while [[ true ]]; do
+                     res=$(awk 'BEGIN{FS=":"}{if ($'$opt'=="'$data'") print $'$data'}' $tName )
                     if [[ $res == "" ]]
                     then
+              if [[ flag == 0 ]]
+                    then 
                     echo "Value Not Found"
+                    fi
                     break
                     else
-                        NR=$(awk 'BEGIN{FS=":"}{if ($'$opt'=="'$data'") print NR}' $tName )
+                        NR=($(awk 'BEGIN{FS=":"}{if ($'$opt'=="'$data'") print NR}' $tName ))
                         sed -i ''$NR'd' $tName
+                        flag=1
                     fi
+                done
                 else
                     echo "Illagel value"
                 fi
             elif [[ ${datatypes[$temp]} = "-s" ]]
             then
-                res=$(awk 'BEGIN{FS=":"}{if ($'$opt'=="'$data'") print $'$data'}' $tName )
-                if [[ $res == "" ]]
-                then
-                echo "Value Not Found"
-                break
-                else
-                    NR=$(awk 'BEGIN{FS=":"}{if ($'$opt'=="'$data'") print NR}' $tName )
-                    echo $NR
-                    sed -i ''$NR'd' $tName
+            flag=0
+                while [[ true ]]; do
+                     res=$(awk 'BEGIN{FS=":"}{if ($'$opt'=="'$data'") print $'$data'}' $tName )
+                    if [[ $res == "" ]]
+                    then
+                    if [[ flag == 0 ]]
+                    then 
+                    echo "Value Not Found"
                     fi
+                    break
+                    else
+                        NR=($(awk 'BEGIN{FS=":"}{if ($'$opt'=="'$data'") print NR}' $tName ))
+                        sed -i ''$NR'd' $tName
+                        flag=1
+                    fi
+                done
             fi
         fi
+        break
     done
 }
 function deleteFromTable {
@@ -80,16 +91,14 @@ function deleteFromTable {
             while [ true ]
             do
                 echo "1) Delete all data"
-                echo "2) Delete One Row " #delete by pk and /or another column
-                echo "3) Delete Many Rows"  #delete by any column
-                echo "4) Go Back"
+                echo "2) Delete Many Rows"  #delete by any column
+                echo "3) Go Back"
                 curr=$(basename $(pwd))
                 read -p "DB/$curr/${Tname}>>" option
                 case $option in
                     1) > $Tname ;;
-                    2) deleteOneRow $Tname;;
-                    3) deleteSpecific $Tname ;;
-                    4) ./../../menuTA.sh;;
+                    2) deleteSpecific $Tname ;;
+                    3) ./../../menuTA.sh;;
                     *) echo "not supported"
                 esac
             done
