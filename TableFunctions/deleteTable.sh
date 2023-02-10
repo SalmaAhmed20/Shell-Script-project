@@ -1,8 +1,6 @@
 #!/bin/bash
 function deleteOneRow {
     fields=$(cut -d "-" -f1 "${1}_meta")
-    
-    
 }
 function deleteSpecific {
     meta="${1}_meta"
@@ -25,7 +23,6 @@ function deleteSpecific {
                 # echo  ${datatypes[$idx]}
             fi
         done
-
         curr=$(basename $(pwd))
         # typeset -i opt=0;5
         read -p "DB/$curr/${1}>>" opt
@@ -41,36 +38,36 @@ function deleteSpecific {
             then
                 if [[ $data =~ ^[0-9]+$ ]]
                 then
-                while [[ true ]]; do
-                     res=$(awk 'BEGIN{FS=":"}{if ($'$opt'=="'$data'") print $'$data'}' $tName )
-                    if [[ $res == "" ]]
-                    then
-              if [[ flag == 0 ]]
-                    then 
-                    echo "Value Not Found"
-                    fi
-                    break
-                    else
-                        NR=($(awk 'BEGIN{FS=":"}{if ($'$opt'=="'$data'") print NR}' $tName ))
-                        sed -i ''$NR'd' $tName
-                        flag=1
-                    fi
-                done
+                    while [[ true ]]; do
+                        res=$(awk 'BEGIN{FS=":"}{if ($'$opt'=="'$data'") print $'$data'}' $tName )
+                        if [[ $res == "" ]]
+                        then
+                            if [[ flag == 0 ]]
+                            then
+                                echo "Value Not Found"
+                            fi
+                            break
+                        else
+                            NR=($(awk 'BEGIN{FS=":"}{if ($'$opt'=="'$data'") print NR}' $tName ))
+                            sed -i ''$NR'd' $tName
+                            flag=1
+                        fi
+                    done
                 else
                     echo "Illagel value"
                 fi
             elif [[ ${datatypes[$temp]} = "-s" ]]
             then
-            flag=0
+                flag=0
                 while [[ true ]]; do
-                     res=$(awk 'BEGIN{FS=":"}{if ($'$opt'=="'$data'") print $'$data'}' $tName )
+                    res=$(awk 'BEGIN{FS=":"}{if ($'$opt'=="'$data'") print $'$data'}' $tName )
                     if [[ $res == "" ]]
                     then
-                    if [[ flag == 0 ]]
-                    then 
-                    echo "Value Not Found"
-                    fi
-                    break
+                        if [[ flag == 0 ]]
+                        then
+                            echo "Value Not Found"
+                        fi
+                        break
                     else
                         NR=($(awk 'BEGIN{FS=":"}{if ($'$opt'=="'$data'") print NR}' $tName ))
                         sed -i ''$NR'd' $tName
