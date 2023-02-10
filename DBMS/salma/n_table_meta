@@ -1,0 +1,4 @@
+id -i
+name -s
+salary -i
+title -s

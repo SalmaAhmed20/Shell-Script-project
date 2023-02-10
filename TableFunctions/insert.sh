@@ -46,13 +46,18 @@ function readRecord {
         else
             if [[ $iterator = 1 ]]
             then 
-             checkPK $f2 $record 
-                if [[ $? = 1 ]]
-                    then 
-                    line+="${record}"
-                    else
-                     break
-                fi
+                if [[ -z $record ]]
+                then
+                    echo "---Primary Key Can not be empty---"
+                    return
+                else
+                    checkPK $f2 $record 
+                        if [[ $? = 1 ]]
+                            then 
+                            line+="${record}"
+                            else
+                            return
+                fi        fi
             else
 
 
@@ -62,7 +67,7 @@ function readRecord {
                 line+=":${record}"
                 else
                 echo "----invalid data type----"
-                break
+                return
                 fi
             fi
         fi
