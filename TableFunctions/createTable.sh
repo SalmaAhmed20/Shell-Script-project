@@ -20,6 +20,7 @@ function CreateTable {
                 while [ $number_fields -le 0 ]
                 do
                     echo "Number of Fields must be greater than 0"
+                    read -p "Enter Number of Fields: " number_fields
                 done
                 touch "${Tname}_meta"
                 while [ $iterator -le $number_fields ];
@@ -53,7 +54,7 @@ function CreateTable {
                             *) flag=0; echo "not supported"
                         esac
                     done
-                    echo "${fName}${dt}" >> "${Tname}_meta"
+                    echo "${fName} ${dt}" >> "${Tname}_meta"
                     iterator=$iterator+1
                 done
             fi
