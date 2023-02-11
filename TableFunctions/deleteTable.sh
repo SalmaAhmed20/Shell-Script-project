@@ -16,6 +16,8 @@ function deleteSpecific {
                 datatypes=(${datatypes[@]} "${field}")
             fi
         done
+        echo $(($idx+1))")""Go Back"
+        idx=$idx+1
         curr=$(basename $(pwd))
         read -p "DB/$curr/${1}>>" opt
         temp=$(($idx+1))
@@ -24,6 +26,10 @@ function deleteSpecific {
             echo "Not valid"
             continue
         else
+        if [ $opt -eq $idx ]; then
+        echo "------cancel current deleting process------"
+        break    
+        fi
             temp=$(($opt-1))
             if [[ ${datatypes[$temp]} = "-i" ]]
             then
@@ -54,7 +60,10 @@ function deleteSpecific {
                 flag=0
                 read -p "Delete Row where " data2
                 while [[ true ]]; do
-                    res=$(awk 'BEGIN{FS=":"}{if ($'$opt'=="'$data2'") print $'$data2'}' $tName )
+                # echo $data2
+                    res=$(awk 'BEGIN{FS=":"}
+                    {if ($'$opt' ~  /'"$data2"'/) print $0; else print ""; }' $tName )
+                    # echo $res
                     if [[ $res == "" ]]
                     then
                         if [[ flag == 0 ]]
@@ -63,7 +72,7 @@ function deleteSpecific {
                         fi
                         break
                     else
-                        NR=($(awk 'BEGIN{FS=":"}{if ($'$opt'=="'$data2'") print NR}' $tName ))
+                        NR=($(awk 'BEGIN{FS=":"}{ if ($'$opt' ~  /'"$data2"'/) print NR}' $tName ))
                         sed -i ''$NR'd' $tName
                         flag=1
                     fi
