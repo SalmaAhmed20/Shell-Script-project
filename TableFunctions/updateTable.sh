@@ -296,7 +296,7 @@ function updateSpecific {
                         if [[ ${datatypes[$temp2]} = "-i" ]]; then
                             read -p "update Row set " val
                             if [[ $val =~ ^[0-9]+$ ]]; then
-                            echo "heraeee"
+                                echo "heraeee"
                                 awk 'BEGIN{FS=":"}{if ($'$searchCol' ~  /'"$data2"'/) sub($'$res','$val')}{ print $0 }' $tName >>.tmpupdate
                                 cat .tmpupdate >$tName
                                 rm .tmpupdate
