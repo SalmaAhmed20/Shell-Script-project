@@ -1,3 +1,4 @@
 id -i
+number -i
 name -s
 school -s
