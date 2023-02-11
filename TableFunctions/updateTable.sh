@@ -14,9 +14,12 @@ function updateEntireColumn
             then 
             if [[ $field != "-i" && $field != "-s" && $field != "pk" ]]
             then
-                echo $(($idx))")""$field"
+                echo $(($idx+1))")""$field"
+                idx=$idx+1
+
             else
                 datatypes=(${datatypes[@]} "${field}")
+                echo "${datatypes[$idx]}"
             fi
             fi
             flag=1
@@ -26,7 +29,7 @@ function updateEntireColumn
         curr=$(basename $(pwd))
         read -p "DB/$curr/${1}>>" opt
         temp=$(($idx+1))
-        if [[ $opt -le 0 || $opt -gt $temp ]]
+        if [[ $opt -le 0 || $opt -gt $idx ]]
             then
                 echo "Not valid"
                 continue
@@ -35,14 +38,30 @@ function updateEntireColumn
                  echo "------cancel current updating process------"
                  break    
                 fi
-                temp=$(($opt-1))
-            if [[ ${datatypes[$temp]} = "-i" ]]
+            if [[ ${datatypes[$opt]} = "-i" ]]
             then
+                        echo "${datatypes[$opt]}"
+
                 typeset -i data
                 read -p "update columns set " data
                     if [[ $data =~ ^[0-9]+$ ]]
                     then
+                    temp=$opt+1 
+                    awk 'sub($'$opt','$data')' $tName
                     fi
+            elif [[ ${datatypes[$temp]} = "-s" ]]
+            then
+                        echo "inn2"
+
+                flag=0
+                read -p "update columns set " data2
+                 if [[ $data2 =~ [:] ]]
+        then
+        echo "----Forbbiden character \":\" ----"
+        else
+                awk '{sub($'$opt','"$data2"')}' $tName
+                fi
+
             fi
         fi
     done   

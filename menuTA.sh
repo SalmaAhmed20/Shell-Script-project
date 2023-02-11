@@ -12,13 +12,13 @@ function MenuTable {
         curr=$(basename $(pwd))
         read -p "DB/$curr>>" option
         case $option in
-            1) echo "Create Table" ; ./../../TableFunctions/createTable.sh ;;
-            2) echo "List Tables"  ; ./../../TableFunctions/listTable.sh ;;
-            3) echo "Drop Table" ; ./../../TableFunctions/drop.sh  ;;
-            4) echo "Insert into Table" ; ./../../TableFunctions/insert.sh ;;
-            5) echo "Select from Table"; ./../../TableFunctions/select.sh ;;
-            6) echo "Delete from Table"; ./../../TableFunctions/deleteTable.sh;;
-            7) echo "Update from Table";;
+            1) echo "-----Create Table-----" ; ./../../TableFunctions/createTable.sh ;;
+            2) echo "-----List Tables-----"  ; ./../../TableFunctions/listTable.sh ;;
+            3) echo "-----Drop Table-----" ; ./../../TableFunctions/drop.sh  ;;
+            4) echo "-----Insert into Table-----" ; ./../../TableFunctions/insert.sh ;;
+            5) echo "-----Select from Table-----"; ./../../TableFunctions/select.sh ;;
+            6) echo "------Delete from Table-----"; ./../../TableFunctions/deleteTable.sh;;
+            7) echo "-----Update from Table-----"; ./../../TableFunctions/updateTable.sh;;
             8) cd .. ; ./../menuDB.sh ;;
             *) echo "Invalid option";;
         esac
