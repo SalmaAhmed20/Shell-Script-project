@@ -97,8 +97,8 @@ function updateSpecific {
     meta="${1}_meta"
     datatypes=()
     tName=$1
-    typeset -i idx=0
     while [[ true ]]; do
+        typeset -i idx=0
         typeset -i searchCol=0
         for line in $(cat $meta); do
             field=$line
