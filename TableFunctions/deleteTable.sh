@@ -60,7 +60,10 @@ function deleteSpecific {
                 flag=0
                 read -p "Delete Row where " data2
                 while [[ true ]]; do
-                    res=$(awk 'BEGIN{FS=":"}{if ($'$opt'=="'$data2'") print $'$data2'}' $tName )
+                # echo $data2
+                    res=$(awk 'BEGIN{FS=":"}
+                    {if ($'$opt' ~  /'"$data2"'/) print $0; else print ""; }' $tName )
+                    # echo $res
                     if [[ $res == "" ]]
                     then
                         if [[ flag == 0 ]]
@@ -69,7 +72,7 @@ function deleteSpecific {
                         fi
                         break
                     else
-                        NR=($(awk 'BEGIN{FS=":"}{if ($'$opt'=="'$data2'") print NR}' $tName ))
+                        NR=($(awk 'BEGIN{FS=":"}{ if ($'$opt' ~  /'"$data2"'/) print NR}' $tName ))
                         sed -i ''$NR'd' $tName
                         flag=1
                     fi
