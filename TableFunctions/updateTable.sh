@@ -144,20 +144,25 @@ function updateSpecific {
                             if [[ $res -eq 1 ]]; then
                                 # check type first case of integer
                                 temp2=$(($res - 1))
-                                echo "ss: ${datatypes[$temp2]} "
                                 if [[ ${datatypes[$temp2]} = "-i" ]]; then
                                     read -p "update Row set " val
                                     if [[ $val =~ ^[0-9]+$ ]]; then
                                         # check existancy
-                                        exist=$(awk 'BEGIN{FS=":"; flag=0}{if ($'$res' == '$val') print $0 ; else print ""  }' $tName)
+                                        exist=$(awk 'BEGIN{FS=":"}{if ($'$res' == '$val') print $0 ; else print ""}' $tName)
                                         if [[ $exist != "" ]]; then
                                             echo "primary key must be unique"
                                             break
                                         else
                                             # if not exist update it
-                                            awk 'BEGIN{FS=":"}{if ($'$searchCol' == '$data') sub($'$res','$val')}{ print $0 }' $tName >>.tmpupdate
-                                            cat .tmpupdate >$tName
-                                            rm .tmpupdate
+                                            NR=($(awk 'BEGIN{FS=":"}{ if ($'$searchCol' == '$data')  print NR}' $tName))
+                                            numberofRecordtoupdate=${#NR[@]}
+                                            if [[ $numberofRecordtoupdate -eq 1 ]]; then
+                                                awk 'BEGIN{FS=":"}{if ($'$searchCol' == '$data') sub($'$res','$val')} { print $0 }' $tName >>.tmpupdate
+                                                cat .tmpupdate >$tName
+                                                rm .tmpupdate
+                                            else
+                                                echo "you cannot update multi-record with same primary key"
+                                            fi
                                         fi
                                     else
                                         echo "Not valid value"
@@ -174,9 +179,15 @@ function updateSpecific {
                                             echo "primary key must be unique"
                                             break
                                         else
-                                            awk 'BEGIN{FS=":"}{if ($'$searchCol' ~  /'"$data"'/) sub($'$res','"\"$val\""')}{ print $0 }' $tName >>.tmpupdate
-                                            cat .tmpupdate >$tName
-                                            rm .tmpupdate
+                                            NR=($(awk 'BEGIN{FS=":"}{ if ($'$searchCol' ~  /'"$data"'/)  print NR}' $tName))
+                                            numberofRecordtoupdate=${#NR[@]}
+                                            if [[ $numberofRecordtoupdate -eq 1 ]]; then
+                                                awk 'BEGIN{FS=":"}{if ($'$searchCol' ~  /'"$data"'/) sub($'$res','"\"$val\""')} { print $0 }' $tName >>.tmpupdate
+                                                cat .tmpupdate >$tName
+                                                rm .tmpupdate
+                                            else
+                                                echo "you cannot update multi-record with same primary key"
+                                            fi
                                         fi
                                     fi
                                 fi
@@ -240,10 +251,15 @@ function updateSpecific {
                                     echo "primary key must be unique"
                                     break
                                 else
-                                    # if not exist update it
-                                    awk 'BEGIN{FS=":"}{if ($'$searchCol' == '$data') sub($'$res','$val')}{ print $0 }' $tName >>.tmpupdate
-                                    cat .tmpupdate >$tName
-                                    rm .tmpupdate
+                                    NR=($(awk 'BEGIN{FS=":"}{ if ($'$searchCol' ~  /'"$data2"'/)  print NR}' $tName))
+                                    numberofRecordtoupdate=${#NR[@]}
+                                    if [[ $numberofRecordtoupdate -eq 1 ]]; then
+                                        awk 'BEGIN{FS=":"}{if ($'$searchCol' ~  /'"$data2"'/) sub($'$res','$val')} { print $0 }' $tName >>.tmpupdate
+                                        cat .tmpupdate >$tName
+                                        rm .tmpupdate
+                                    else
+                                        echo "you cannot update multi-record with same primary key"
+                                    fi
                                 fi
                             else
                                 echo "Not valid value"
@@ -261,9 +277,15 @@ function updateSpecific {
                                     echo "primary key must be unique"
                                     break
                                 else
-                                    awk 'BEGIN{FS=":"}{if ($'$searchCol' ~  /'"$data"'/) sub($'$res','"\"$val\""')}{ print $0 }' $tName >>.tmpupdate
-                                    cat .tmpupdate >$tName
-                                    rm .tmpupdate
+                                    NR=($(awk 'BEGIN{FS=":"}{ if ($'$searchCol' ~  /'"$data2"'/)  print NR}' $tName))
+                                    numberofRecordtoupdate=${#NR[@]}
+                                    if [[ $numberofRecordtoupdate -eq 1 ]]; then
+                                        awk 'BEGIN{FS=":"}{if ($'$searchCol' ~  /'"$data2"'/) sub($'$res','"\"$val\""')} { print $0 }' $tName >>.tmpupdate
+                                        cat .tmpupdate >$tName
+                                        rm .tmpupdate
+                                    else
+                                        echo "you cannot update multi-record with same primary key"
+                                    fi
                                 fi
                             fi
                         fi
@@ -274,7 +296,8 @@ function updateSpecific {
                         if [[ ${datatypes[$temp2]} = "-i" ]]; then
                             read -p "update Row set " val
                             if [[ $val =~ ^[0-9]+$ ]]; then
-                                awk 'BEGIN{FS=":"}{if ($'$searchCol' == '$data') sub($'$res','$val')}{ print $0 }' $tName >>.tmpupdate
+                            echo "heraeee"
+                                awk 'BEGIN{FS=":"}{if ($'$searchCol' ~  /'"$data2"'/) sub($'$res','$val')}{ print $0 }' $tName >>.tmpupdate
                                 cat .tmpupdate >$tName
                                 rm .tmpupdate
                             else
@@ -287,7 +310,7 @@ function updateSpecific {
                                 echo "----Forbbiden character \":\" ----"
                                 break
                             else
-                                awk 'BEGIN{FS=":"}{if ($'$searchCol' ~  /'"$data"'/) sub($'$res','"\"$val\""')}{ print $0 }' $tName >>.tmpupdate
+                                awk 'BEGIN{FS=":"}{if ($'$searchCol' ~  /'"$data2"'/) sub($'$res','"\"$val\""')}{ print $0 }' $tName >>.tmpupdate
                                 cat .tmpupdate >$tName
                                 rm .tmpupdate
                             fi
