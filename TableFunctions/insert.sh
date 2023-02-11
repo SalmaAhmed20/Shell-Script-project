@@ -91,11 +91,13 @@ function insert {
         break ;;
         3 ) exit 
         ;;
+        * ) exit 
+        ;;
         esac
         done
         
                 
-        else
+    else
         echo "----No Such Table with Name: \"$Tname\" ----"
     fi
     
