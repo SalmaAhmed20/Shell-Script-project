@@ -26,15 +26,15 @@ function deleteSpecific {
             echo "Not valid"
             continue
         else
-        if [ $opt -eq $idx ]; then
-        echo "------cancel current deleting process------"
-        break    
-        fi
+            if [ $opt -eq $idx ]; then
+                echo "------cancel current deleting process------"
+                break
+            fi
             temp=$(($opt-1))
             if [[ ${datatypes[$temp]} = "-i" ]]
             then
-            typeset -i data
-            read -p "Delete Row where " data
+                typeset -i data
+                read -p "Delete Row where " data
                 if [[ $data =~ ^[0-9]+$ ]]
                 then
                     while [[ true ]]; do
@@ -60,7 +60,7 @@ function deleteSpecific {
                 flag=0
                 read -p "Delete Row where " data2
                 while [[ true ]]; do
-                # echo $data2
+                    # echo $data2
                     res=$(awk 'BEGIN{FS=":"}
                     {if ($'$opt' ~  /'"$data2"'/) print $0; else print ""; }' $tName )
                     # echo $res
