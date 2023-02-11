@@ -61,13 +61,20 @@ function readRecord {
             else
 
 
-                checkDataType $f2 $record 
-                if [[ $? = 1 ]]
-                then 
-                line+=":${record}"
+                
+                if [[ -z $record ]] 
+                then
+                 line+=": "
+                
                 else
-                echo "----invalid data type----"
-                return
+                    checkDataType $f2 $record 
+                    if [[ $? = 1 ]]
+                    then 
+                    line+=":${record}"
+                    else
+                    echo "----invalid data type----"
+                    return
+                    fi
                 fi
             fi
         fi
