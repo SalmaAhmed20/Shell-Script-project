@@ -161,7 +161,7 @@ function updateSpecific {
                                             NR=($(awk 'BEGIN{FS=":"}{ if ($'$searchCol' == '$data')  print NR}' $tName))
                                             numberofRecordtoupdate=${#NR[@]}
                                             if [[ $numberofRecordtoupdate -eq 1 ]]; then
-                                                awk 'BEGIN{FS=":"}{if ($'$searchCol' == '$data')
+                                                awk 'BEGIN{FS=":";OFS=":"}{if ($'$searchCol' == '$data')
                                                  { 
                                                 if (length($'$res') == 0)
                                                  $'$res'='$val';
@@ -198,7 +198,7 @@ function updateSpecific {
                                             numberofRecordtoupdate=${#NR[@]}
                                             if [[ $numberofRecordtoupdate -eq 1 ]]; then
                                                 # echo "hhhhhh"
-                                                awk 'BEGIN{FS=":"}{if ($'$searchCol' ==  '$data')  { 
+                                                awk 'BEGIN{FS=":";OFS=":"}{if ($'$searchCol' ==  '$data')  { 
                                                 if (length($'$res') == 0)
                                                  $'$res'='"\"$val\""';
                                                 else 
