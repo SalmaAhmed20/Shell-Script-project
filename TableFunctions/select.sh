@@ -19,12 +19,18 @@ function selectByValue {
         return
         else
             read -p "Enter Value " value 
-            #get all row
-            awk -F : -v cn="$columnNumber" -v v="$value" '{
+            #get all rows
+            lines=`awk -F : -v cn="$columnNumber" -v v="$value" '{
                 if($cn == v) 
                 print $0;
-            }' $Tname
+            }' $Tname`
+            #read num of records
             
+            if [[ -z $lines ]]; then
+                echo "---No Records Found---"
+            else
+                echo "$lines"
+            fi
         fi
     else
     echo "---Invalid Format---"

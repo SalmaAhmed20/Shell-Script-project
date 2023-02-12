@@ -29,15 +29,15 @@ function checkPK {
 function readRecord {
     line=""
     iterator=1
-    flag=0
+    
     # read meta data
     while read f1 f2; do
 
         read -u 1 -p "Enter $f1 record " record
         if [[ $record =~ [:] ]]; then
             echo "----Forbbiden character \":\" ----"
-            flag=1
-            break
+            
+            return
         else
             if [[ $iterator = 1 ]]; then
                 if [[ -z $record ]]; then
@@ -68,9 +68,9 @@ function readRecord {
         iterator+=1
 
     done <"${Tname}_meta"
-    if [[ flag -eq 0 ]]; then
+    
         echo $line >>$Tname
-    fi
+    
 }
 
 function insert {
