@@ -2,6 +2,7 @@
 function deleteSpecific {
     meta="${1}_meta"
     datatypes=()
+    fields=()
     tName=$1
     while [[ true ]]; do
         typeset -i idx=0
@@ -9,6 +10,7 @@ function deleteSpecific {
             field=$line
             if [[ $field != "-i" && $field != "-s" && $field != "pk" ]]; then
                 echo $(($idx + 1))")""$field"
+                fields=(${fields[@]} "${field}")
                 idx=$idx+1
             else
                 datatypes=(${datatypes[@]} "${field}")
@@ -29,36 +31,32 @@ function deleteSpecific {
             fi
             temp=$(($opt - 1))
             if [[ ${datatypes[$temp]} = "-i" ]]; then
-                read -p "Delete Row where " data
+                read -p "Delete Row where ""${fields[$temp]}"" = " data
                 if [[ -z $data ]]; then
                     echo "can't be empty"
                 else
-                    if [[ $data =~ *[!\ ]* ]]; then
-                        echo "can't be spaces"
-                    else
-                        if [[ $data =~ ^[0-9]+$ ]]; then
+                    if [[ $data =~ ^[0-9]+$ ]]; then
 
-                            while [[ true ]]; do
-                                res=$(awk 'BEGIN{FS=":"}{if ($'$opt' == '$data') print $0; else print ""; }' $tName)
-                                if [[ $res == "" ]]; then
-                                    if [[ flag -eq 0 ]]; then
-                                        echo "Value Not Found"
-                                    fi
-                                    break
-                                else
-                                    NR=($(awk 'BEGIN{FS=":"}{if ($'$opt' == '$data') print NR}' $tName))
-                                    sed -i ''$NR'd' $tName
-                                    flag=1
+                        while [[ true ]]; do
+                            res=$(awk 'BEGIN{FS=":"}{if ($'$opt' == '$data') print $0; else print ""; }' $tName)
+                            if [[ $res == "" ]]; then
+                                if [[ flag -eq 0 ]]; then
+                                    echo "Value Not Found"
                                 fi
-                            done
-                        else
-                            echo "Illagel value"
-                        fi
+                                break
+                            else
+                                NR=($(awk 'BEGIN{FS=":"}{if ($'$opt' == '$data') print NR}' $tName))
+                                sed -i ''$NR'd' $tName
+                                flag=1
+                            fi
+                        done
+                    else
+                        echo "Illagel value"
                     fi
                 fi
             elif [[ ${datatypes[$temp]} = "-s" ]]; then
                 flag=0
-                read -p "Delete Row where " data2
+                read -p "Delete Row where ""${fields[$temp]}"" = "   data2
                 if [[ -z $data2 ]]; then
                     echo "can't be empty"
                 else
