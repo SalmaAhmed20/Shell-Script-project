@@ -52,9 +52,7 @@ function readRecord {
                     fi
                 fi
             else
-                if [[ -z $record ]]; then
-                    line+=": "
-                else
+                
                     checkDataType $f2 $record
                     if [[ $? = 1 ]]; then
                         line+=":${record}"
@@ -62,7 +60,7 @@ function readRecord {
                         echo "----invalid data type----"
                         return
                     fi
-                fi
+                
             fi
         fi
         iterator+=1
