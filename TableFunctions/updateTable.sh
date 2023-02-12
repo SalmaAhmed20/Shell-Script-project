@@ -146,6 +146,10 @@ function updateSpecific {
                                 temp2=$(($res - 1))
                                 if [[ ${datatypes[$temp2]} = "-i" ]]; then
                                     read -p "update Row set " val
+                                    if [[ -z $val ]]; then
+                                        echo "cannot be empty"
+                                        return
+                                    fi
                                     if [[ $val =~ ^[0-9]+$ ]]; then
                                         # check existancy
                                         exist=$(awk 'BEGIN{FS=":"}{if ($'$res' == '$val') print $0 ; else print ""}' $tName)
@@ -157,7 +161,14 @@ function updateSpecific {
                                             NR=($(awk 'BEGIN{FS=":"}{ if ($'$searchCol' == '$data')  print NR}' $tName))
                                             numberofRecordtoupdate=${#NR[@]}
                                             if [[ $numberofRecordtoupdate -eq 1 ]]; then
-                                                awk 'BEGIN{FS=":"}{if ($'$searchCol' == '$data') sub($'$res','$val')} { print $0 }' $tName >>.tmpupdate
+                                                awk 'BEGIN{FS=":"}{if ($'$searchCol' == '$data')
+                                                 { 
+                                                if (length($'$res') == 0)
+                                                 $'$res'='$val';
+                                                else 
+                                                 sub($'$res','$val')
+                                            }
+                                            } { print $0 }' $tName >>.tmpupdate
                                                 cat .tmpupdate >$tName
                                                 rm .tmpupdate
                                             else
@@ -171,6 +182,10 @@ function updateSpecific {
                                 # case of string data type
                                 elif [[ ${datatypes[$temp2]} = "-s" ]]; then
                                     read -p "update Row set " val
+                                    if [[ -z $val ]]; then
+                                        echo "cannot be empty"
+                                        return
+                                    fi
                                     if [[ $val =~ [:] ]]; then
                                         echo "----Forbbiden character \":\" ----"
                                     else
@@ -182,7 +197,14 @@ function updateSpecific {
                                             NR=($(awk 'BEGIN{FS=":"}{ if ($'$searchCol' ~  /'"$data"'/)  print NR}' $tName))
                                             numberofRecordtoupdate=${#NR[@]}
                                             if [[ $numberofRecordtoupdate -eq 1 ]]; then
-                                                awk 'BEGIN{FS=":"}{if ($'$searchCol' ~  /'"$data"'/) sub($'$res','"\"$val\""')} { print $0 }' $tName >>.tmpupdate
+                                                # echo "hhhhhh"
+                                                awk 'BEGIN{FS=":"}{if ($'$searchCol' ==  '$data')  { 
+                                                if (length($'$res') == 0)
+                                                 $'$res'='"\"$val\""';
+                                                else 
+                                                 sub($'$res','"\"$val\""')
+                                                }
+                                                 } { print $0 }' $tName >>.tmpupdate
                                                 cat .tmpupdate >$tName
                                                 rm .tmpupdate
                                             else
@@ -198,7 +220,14 @@ function updateSpecific {
                                 if [[ ${datatypes[$temp2]} = "-i" ]]; then
                                     read -p "update Row set " val
                                     if [[ $val =~ ^[0-9]+$ ]]; then
-                                        awk 'BEGIN{FS=":"}{if ($'$searchCol' == '$data') sub($'$res','$val')}{ print $0 }' $tName >>.tmpupdate
+                                    echo "hhhhh"
+                                        awk 'BEGIN{FS=":";OFS=":"}{if ($'$searchCol' == '$data') 
+                                          { 
+                                                if (length($'$res') == 0)
+                                                 $'$res'='"\"$val\""';
+                                                else 
+                                                 sub($'$res','"\"$val\""')
+                                            }}{ print $0 }' $tName >>.tmpupdate
                                         cat .tmpupdate >$tName
                                         rm .tmpupdate
                                     else
@@ -210,7 +239,14 @@ function updateSpecific {
                                     if [[ $val =~ [:] ]]; then
                                         echo "----Forbbiden character \":\" ----"
                                     else
-                                        awk 'BEGIN{FS=":"}{if ($'$searchCol' ~  /'"$data"'/) sub($'$res','"\"$val\""')}{ print $0 }' $tName >>.tmpupdate
+                                        awk 'BEGIN{FS=":";OFS=":"}{
+                                            if ($'$searchCol' ==  '$data') { 
+                                                if (length($'$res') == 0)
+                                                 $'$res'='"\"$val\""';
+                                                else 
+                                                 sub($'$res','"\"$val\""')
+                                            }
+                                        } { print $0 }' $tName >>.tmpupdate
                                         cat .tmpupdate >$tName
                                         rm .tmpupdate
                                     fi
@@ -244,6 +280,10 @@ function updateSpecific {
                         echo "ss: ${datatypes[$temp2]} "
                         if [[ ${datatypes[$temp2]} = "-i" ]]; then
                             read -p "update Row set " val
+                            if [[ -z $val ]]; then
+                                echo "cannot be empty"
+                                return
+                            fi
                             if [[ $val =~ ^[0-9]+$ ]]; then
                                 # check existancy
                                 exist=$(awk 'BEGIN{FS=":"; flag=0}{if ($'$res' == '$val') print $0 ; else print ""  }' $tName)
@@ -254,7 +294,14 @@ function updateSpecific {
                                     NR=($(awk 'BEGIN{FS=":"}{ if ($'$searchCol' ~  /'"$data2"'/)  print NR}' $tName))
                                     numberofRecordtoupdate=${#NR[@]}
                                     if [[ $numberofRecordtoupdate -eq 1 ]]; then
-                                        awk 'BEGIN{FS=":"}{if ($'$searchCol' ~  /'"$data2"'/) sub($'$res','$val')} { print $0 }' $tName >>.tmpupdate
+                                        awk 'BEGIN{FS=":";OFS=":"}{if ($'$searchCol' ~  /'"$data2"'/) 
+                                         { 
+                                                if (length($'$res') == 0)
+                                                 $'$res'='$val';
+                                                else 
+                                                 sub($'$res','$val')
+                                            }
+                                        } { print $0 }' $tName >>.tmpupdate
                                         cat .tmpupdate >$tName
                                         rm .tmpupdate
                                     else
@@ -268,11 +315,15 @@ function updateSpecific {
                             # case of string data type
                         elif [[ ${datatypes[$temp2]} = "-s" ]]; then
                             read -p "update Row set " val
+                            if [[ -z $val ]]; then
+                                echo "cannot be empty"
+                                return
+                            fi
                             if [[ $val =~ [:] ]]; then
                                 echo "----Forbbiden character \":\" ----"
                                 break
                             else
-                                exist=$(awk 'BEGIN{FS=":"; flag=0}{if ($'$res'  ~  /'"$val"'/) print $0 ; else print ""  }' $tName)
+                                exist=$(awk 'BEGIN{FS=":"}{if ($'$res'  ~  /'"$val"'/) print $0 ; else print ""  }' $tName)
                                 if [[ $exist != "" ]]; then
                                     echo "primary key must be unique"
                                     break
@@ -280,7 +331,14 @@ function updateSpecific {
                                     NR=($(awk 'BEGIN{FS=":"}{ if ($'$searchCol' ~  /'"$data2"'/)  print NR}' $tName))
                                     numberofRecordtoupdate=${#NR[@]}
                                     if [[ $numberofRecordtoupdate -eq 1 ]]; then
-                                        awk 'BEGIN{FS=":"}{if ($'$searchCol' ~  /'"$data2"'/) sub($'$res','"\"$val\""')} { print $0 }' $tName >>.tmpupdate
+                                        awk 'BEGIN{FS=":";OFS=":"}{if ($'$searchCol' ~  /'"$data2"'/) 
+                                         { 
+                                                if (length($'$res') == 0)
+                                                 $'$res'='"\"$val\""';
+                                                else 
+                                                 sub($'$res','"\"$val\""')
+                                            }
+                                        } { print $0 }' $tName >>.tmpupdate
                                         cat .tmpupdate >$tName
                                         rm .tmpupdate
                                     else
@@ -297,7 +355,14 @@ function updateSpecific {
                             read -p "update Row set " val
                             if [[ $val =~ ^[0-9]+$ ]]; then
                                 echo "heraeee"
-                                awk 'BEGIN{FS=":"}{if ($'$searchCol' ~  /'"$data2"'/) sub($'$res','$val')}{ print $0 }' $tName >>.tmpupdate
+                                awk 'BEGIN{FS=":"}{if ($'$searchCol' ~  /'"$data2"'/) 
+                                { 
+                                                if (length($'$res') == 0)
+                                                 $'$res'='"\"$val\""';
+                                                else 
+                                                 sub($'$res','"\"$val\""')
+                                            }
+                               }{ print $0 }' $tName >>.tmpupdate
                                 cat .tmpupdate >$tName
                                 rm .tmpupdate
                             else
@@ -310,7 +375,14 @@ function updateSpecific {
                                 echo "----Forbbiden character \":\" ----"
                                 break
                             else
-                                awk 'BEGIN{FS=":"}{if ($'$searchCol' ~  /'"$data2"'/) sub($'$res','"\"$val\""')}{ print $0 }' $tName >>.tmpupdate
+                                awk 'BEGIN{FS=":";OFS=":"}{if ($'$searchCol' ~  /'"$data2"'/) 
+                                 { 
+                                                if (length($'$res') == 0)
+                                                 $'$res'='"\"$val\""';
+                                                else 
+                                                 sub($'$res','"\"$val\""')
+                                            }
+                               }{ print $0 }' $tName >>.tmpupdate
                                 cat .tmpupdate >$tName
                                 rm .tmpupdate
                             fi
