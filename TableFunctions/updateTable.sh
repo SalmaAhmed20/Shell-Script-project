@@ -126,7 +126,6 @@ function updateSpecific {
             fi
             temp=$(($searchCol - 1))
             if [[ ${datatypes[$temp]} = "-i" ]]; then
-                typeset -i data
                 read -p "update Row where " data
                 if [[ $data =~ ^[0-9]+$ ]]; then
                     while [[ true ]]; do
