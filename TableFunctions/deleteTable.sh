@@ -60,9 +60,6 @@ function deleteSpecific {
                 if [[ -z $data2 ]]; then
                     echo "can't be empty"
                 else
-                    if [[ $data2 =~ *[!\ ]* ]]; then
-                        echo "can't be spaces"
-                    else
                         while [[ true ]]; do
                             # echo $data2
                             res=$(awk 'BEGIN{FS=":"}
@@ -79,7 +76,7 @@ function deleteSpecific {
                                 flag=1
                             fi
                         done
-                    fi
+                    
                 fi
             fi
         fi

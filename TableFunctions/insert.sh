@@ -13,8 +13,8 @@ function checkDataType {
 function checkPK {
     checkDataType $1 $2
     if [[ $? = 1 ]]; then
-        while IFS=':' read -r f1 f2; do
-
+        while IFS=':' read -r f1 f2; do # internal field separator
+            # -r disable back slash
             if [[ $2 == $f1 ]]; then
                 echo "----PrimaryKey Already Exist----"
                 return 0
@@ -29,14 +29,13 @@ function checkPK {
 function readRecord {
     line=""
     iterator=1
-    
+
     # read meta data
     while read f1 f2; do
 
         read -u 1 -p "Enter $f1 record " record
         if [[ $record =~ [:] ]]; then
             echo "----Forbbiden character \":\" ----"
-            
             return
         else
             if [[ $iterator = 1 ]]; then
@@ -52,23 +51,22 @@ function readRecord {
                     fi
                 fi
             else
-                
-                    checkDataType $f2 $record
-                    if [[ $? = 1 ]]; then
-                        line+=":${record}"
-                    else
-                        echo "----invalid data type----"
-                        return
-                    fi
-                
+                checkDataType $f2 $record
+                if [[ $? = 1 ]]; then
+                    line+=":${record}"
+                else
+                    echo "----invalid data type----"
+                    return
+                fi
+
             fi
         fi
         iterator+=1
 
     done <"${Tname}_meta"
-    
-        echo $line >>$Tname
-    
+
+    echo $line >>$Tname
+
 }
 
 function insert {

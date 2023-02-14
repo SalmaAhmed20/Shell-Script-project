@@ -10,6 +10,7 @@ function CreateTable {
         # check that table don't end with _
         if [[ $Tname == *[_] ]]; then
             echo "Not Valid Table name"
+            return
         else
             # check for existance
             if [[ -f "$Tname" ]]; then
@@ -33,6 +34,7 @@ function CreateTable {
                             # check that field don't end with _
                             if [[ $fName == *[_] ]]; then
                                 echo "Not Valid Field name"
+                                continue
                             else
                                 break
                             fi
