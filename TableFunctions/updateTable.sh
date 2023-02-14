@@ -42,7 +42,7 @@ function updateEntireColumn {
         for line in $(cat $meta); do
             field=$line
             if [[ flag -ne 0 ]]; then
-                if [[ $field != "-i" && $field != "-s" && $field != "pk" ]]; then
+                if [[ $field != "-i" && $field != "-s" ]]; then
                     echo $(($idx + 1))")""$field"
                     idx=$idx+1
                 else
@@ -64,7 +64,7 @@ function updateEntireColumn {
                 echo "------cancel current updating process------"
                 break
             fi
-            echo "${datatypes[$opt]}"
+            # echo "${datatypes[$opt]}"
             if [[ ${datatypes[$opt]} = "-i" ]]; then
                 typeset -i data
                 read -p "update columns set " data
@@ -72,7 +72,10 @@ function updateEntireColumn {
                     temp=$(($opt + 1))
                     # echo $temp
                     # touch .tmpupdate
-                    awk -F ":" '{sub($'$temp','$data'); print $0}' $tName >>.tmpupdate
+                    awk -F ":" 'BEGIN{FS=":";OFS=":"}''{if (length($'$temp') == 0)
+                                    $'$temp'='"\"$data\""';
+                                    else
+                                                 sub($'$temp','$data'); print $0}' $tName >>.tmpupdate
                     cat .tmpupdate >$tName
                     rm .tmpupdate
                 fi
@@ -84,7 +87,9 @@ function updateEntireColumn {
                     echo "----Forbbiden character \":\" ----"
                 else
                     temp=$(($opt + 1))
-                    awk -F ":" '{ sub($'$temp','"\"$data2\""'); print $0}' $tName >>.tmpupdate
+                    awk -F ":" 'BEGIN{FS=":";OFS=":"}''{if (length($'$temp') == 0)
+                                    $'$temp'='"\"$data2\""';
+                                    else sub($'$temp','"\"$data2\""'); print $0}' $tName >>.tmpupdate
                     cat .tmpupdate >$tName
                     rm .tmpupdate
                 fi
@@ -219,7 +224,7 @@ function updateSpecific {
                                 if [[ ${datatypes[$temp2]} = "-i" ]]; then
                                     read -p "update Row set " val
                                     if [[ $val =~ ^[0-9]+$ ]]; then
-                                    echo "hhhhh"
+                                    # echo "hhhhh"
                                         awk 'BEGIN{FS=":";OFS=":"}{if ($'$searchCol' == '$data') 
                                           { 
                                                 if (length($'$res') == 0)
