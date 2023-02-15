@@ -1,6 +1,6 @@
 #!/bin/bash
 function DropDB {
-    read -p "Enter Database name: " DBname
+    read -r -p "Enter Database name: " DBname
     if [[ $DBname =~ ^[a-zA-Z]{1}[_0-9a-zA-Z$]{,63}$ ]]
     then
         if [[ $DBname == *[_$] ]]

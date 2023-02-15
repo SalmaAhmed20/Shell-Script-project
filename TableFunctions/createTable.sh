@@ -4,7 +4,7 @@ function CreateTable {
     typeset -i iterator=1
     fName=""
     fieldsName=()
-    read -p "Enter Table Name: " Tname
+    read -r -p "Enter Table Name: " Tname
     # check for regex
     if [[ $Tname =~ ^[a-zA-Z]{1}[_0-9a-zA-Z]{,31}$ ]]; then
         # check that table don't end with _

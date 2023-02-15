@@ -1,5 +1,5 @@
 function dropTable {
-    read -p "Enter Table Name " Tname
+    read -r -p "Enter Table Name " Tname
     if [[ -f $Tname && -f "${Tname}_meta" ]]
     then
         rm $Tname "${Tname}_meta"

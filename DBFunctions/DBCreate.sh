@@ -1,6 +1,6 @@
 #!/bin/bash
 function CreateDB {
-    read -p "Enter Database Name: " DBname
+    read -r -p "Enter Database Name: " DBname
     if [[ $DBname =~ ^[a-zA-Z]{1}[_0-9a-zA-Z$]{,63}$ ]]; then
         if [[ $DBname == *[_$] ]]; then
             echo "Not Valid DB name"

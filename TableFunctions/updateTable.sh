@@ -402,7 +402,7 @@ function updateSpecific {
     done
 }
 function updateTable {
-    read -p "Enter Table Name:  " Tname
+    read -r -p "Enter Table Name:  " Tname
     if [[ $Tname =~ ^[a-zA-Z]{1}[_0-9a-zA-Z]{,31}$ ]]; then
         if [[ -f $Tname ]]; then
             while [ true ]; do

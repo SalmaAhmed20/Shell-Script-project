@@ -9,7 +9,7 @@ function selectByValue {
     
     awk -F " " '{print NR" ) " $1 }' "${Tname}_meta"
     NoOfColumns=`wc -l "${Tname}_meta" | cut -d " " -f1`
-    read -p "Enter Column Number" columnNumber
+    read -p -r "Enter Column Number" columnNumber
     if [[ $columnNumber =~ ^[0-9]+$ ]]
     then
         
